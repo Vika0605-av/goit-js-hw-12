@@ -6,6 +6,9 @@ import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
 const form = document.querySelector('.search-form');
 const gallery = document.querySelector('.gallery');
+let query;
+let page = 1;
+let per_page = 15;
 
 form.addEventListener('submit', handleSubmit);
 async function handleSubmit(e) {
@@ -23,7 +26,7 @@ clearGallery();
     showLoader();
 
     try {
-        const images = await getImagesByQuery(query);
+        const images = await getImagesByQuery(query, page, per_page);
         if (!images || images.length === 0) {
             iziToast.error({
                 title: 'Error',
