@@ -14,9 +14,7 @@ let page = 1;
 let per_page = 15;
 let totalPages = 0;
 
-function hideLoadMoreBtn() {
-    loadMoreBtn.classList.add('hidden');
-}
+
 function disableLoadMoreBtn() {
     loadMoreBtn.disabled = true;
 }
