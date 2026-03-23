@@ -1,5 +1,6 @@
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
+import { getImagesByQuery } from "./pixabay-api";
 
 let lightbox = new SimpleLightbox('.gallery-item', { captionDelay: 250 });
 const gallery = document.querySelector('#gallery');
