@@ -14,9 +14,6 @@ let page = 1;
 let per_page = 15;
 let totalPages = 0;
 
-function showLoadMoreBtn() {
-    loadMoreBtn.classList.remove('hidden');
-}
 function hideLoadMoreBtn() {
     loadMoreBtn.classList.add('hidden');
 }
@@ -33,48 +30,43 @@ form.addEventListener('submit', async e => {
         page = 1;
         clearGallery();
         hideLoadMoreBtn();
+        return;
+    }
     showLoader();
     try {
         const data = await getImagesByQuery(query, page, per_page);
-        const { hits, totalPages } = data;
-        if (hits.length === 0) {
-            alert ('No images found. Please try a different search query.');
+        const { hits, totalHits } = data;
+        if (!hits || hits.length === 0) {
+            alert('No images found. Please try a different search query.');
             return;
         }
-        totalPages = Math.ceil(data.totalPages / per_page);
+        totalPages = Math.ceil(totalHits / per_page);
         renderImages(hits);
         if (page < totalPages) {
             showLoadMoreBtn();
         } else {
             alert("You've reached the end of search results.");
         }
-        } catch (error) {
-            console.error('Error fetching images:', error);
-        } finally {
-            hideLoader();
-        }
-    });
-    loadMoreBtn.addEventListener('click', async () => {
-  page += 1;
-
-  disableLoadMoreBtn();
-  showLoader();
-
-  try {
-    const data = await getImagesByQuery(query, page, perPage);
-    const { hits } = data;
-
-    renderGallery(hits);
-
-    if (page >= totalPages) {
-      hideLoadMoreBtn();
-      alert('Кінець результатів 👍');
+    } catch (error) {
+        console.error('Error fetching images:', error);
+    } finally {
+        hideLoader();
     }
-
-  } catch (error) {
-    console.log(error);
-  } finally {
-    enableLoadMoreBtn();
-    hideLoader();
-  }
 });
+     
+   loadMoreBtn.addEventListener('click', async () => {
+    page += 1;
+    showLoader();
+    try {
+        const data = await getImagesByQuery(query, page, per_page);
+        renderImages(data.hits || data);
+        if (page >= totalPages) {
+            hideLoadMoreBtn();
+        }
+    } catch (error) {
+        console.error(error);
+    } finally {
+        hideLoader();
+    }
+});
+   
