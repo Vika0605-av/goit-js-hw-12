@@ -33,3 +33,9 @@ export function showLoader() {
 export function hideLoader() {
   document.querySelector('.loader').classList.add('hidden');
 }
+export function showLoadMoreBtn() {
+  loadMoreBtn.classList.remove('hidden');
+}
+export function hideLoadMoreBtn() {
+  loadMoreBtn.classList.add('hidden');
+}

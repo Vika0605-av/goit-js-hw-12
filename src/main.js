@@ -1,19 +1,20 @@
 import { getImagesByQuery } from './js/pixabay-api.js';
 import { renderImages, clearGallery, showLoader } from './js/render-functions.js';
 import { hideLoader } from './js/render-functions.js';
+import { showLoadMoreBtn, hideLoadMoreBtn } from './js/render-functions.js';
 
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
 const form = document.querySelector('.search-form');
 const gallery = document.querySelector('.gallery');
-const loadMoreBtn = document.querySelector('.js-load-more');
+const loadMoreBtn = document.querySelector('.load-more');
 let query;
 let page = 1;
 let per_page = 15;
 let totalPages = 0;
 
-
 form.addEventListener('submit', handleSubmit);
+loadMoreBtn.addEventListener('click', handleLoadMore);
 async function handleSubmit(e) {
     e.preventDefault();
     query = e.target.elements.searchText.value.trim();
@@ -27,7 +28,7 @@ async function handleSubmit(e) {
     }
     page = 1;
 clearGallery();
-loadMoreBtn.style.display = 'none';
+hideLoadMoreBtn();
     showLoader();
 
     try {
@@ -59,7 +60,7 @@ async function handleLoadMore() {
         renderImages(images);
         const totalPages = Math.ceil(data.totalPages / per_page);
         if (page >= totalPages) {
-            loadMoreBtn.style.display = 'none';
+            hideLoadMoreBtn();
             iziToast.info({
                 message: " We're sorry, but you've reached the end of search results."
             });
