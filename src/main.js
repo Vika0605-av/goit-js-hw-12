@@ -1,5 +1,5 @@
 import { getImagesByQuery } from './js/pixabay-api.js';
-import { renderImages, clearGallery, showLoader } from './js/render-functions.js';
+import { renderImages, clearGallery} from './js/render-functions.js';
 import { hideLoader, showLoader } from './js/render-functions.js';
 import { showLoadMoreBtn, hideLoadMoreBtn } from './js/render-functions.js';
 
