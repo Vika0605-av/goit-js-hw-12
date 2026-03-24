@@ -51,7 +51,7 @@ form.addEventListener('submit', async e => {
         }
     } catch (error) {
         iziToast.error({ 
-        message: 'Error fetching images:, error',
+        message: 'error.message',
                 CaretPosition: 'topRight',
             });
     } finally {
@@ -63,10 +63,13 @@ form.addEventListener('submit', async e => {
     page += 1;
     disableLoadMoreBtn()
     showLoader();
-    try {
-        const data = await getImagesByQuery(query, page, per_page);
-        const { hits } = data;
-        renderImages(hits);
+try {
+    const { hits } = await getImagesByQuery(query,page, per_page);
+    if (hits.length === 0) {
+        hideLoadMoreBtn()
+        return;
+    }
+renderImages(hits);
         if (page >= totalPages) {
             hideLoadMoreBtn();
             iziToast.info({
@@ -81,7 +84,7 @@ form.addEventListener('submit', async e => {
                 CaretPosition: 'topRight',
             });
     } finally {
-        enableLoadMoreBtn
+        enableLoadMoreBtn();
         hideLoader();
     }
 });
