@@ -4,6 +4,7 @@ import { getImagesByQuery } from "./pixabay-api";
 
 let lightbox = new SimpleLightbox('.gallery-item', { captionDelay: 250 });
 const gallery = document.querySelector('#gallery');
+const loadMoreBtn = document.querySelector('.load-more');
 
 export function renderImages(images) {
   const markup = images.map(img => `
