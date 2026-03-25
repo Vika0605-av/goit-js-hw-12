@@ -25,10 +25,9 @@ form.addEventListener('submit', async e => {
     query = e.target.elements.searchText.value.trim();
     if (!query)  return ;
         page = 1;
-        clearGallery();
         hideLoadMoreBtn();
         showLoader();
-    
+     clearGallery();
     try {
         const data = await getImagesByQuery(query, page, per_page);
         const { hits, totalHits } = data;
@@ -44,6 +43,7 @@ form.addEventListener('submit', async e => {
         if (page < totalPages) {
             showLoadMoreBtn();
         } else {
+            hideLoadMoreBtn();
             iziToast.error({
                 message: 'Youve reached the end of search results.',
                 CaretPosition: 'topRight',
@@ -58,38 +58,29 @@ form.addEventListener('submit', async e => {
         hideLoader();
     }
 });
-     
    loadMoreBtn.addEventListener('click', async () => {
     page += 1;
     hideLoadMoreBtn();
     showLoader();
 try {
     const { hits } = await getImagesByQuery(query,page, per_page);
-    if (hits.length === 0) {
+    renderImages(hits);
+    if (page < totalPages) {
+        showLoadMoreBtn();
+        } else { 
+        hideLoadMoreBtn();
         iziToast.info({
            message: 'Were sorry, but youve reached the end of search results.',
            CaretPosition: 'topRight',
-        })
-        hideLoadMoreBtn()
-        return;
+        });
     }
-renderImages(hits);
-const { height: cardHeight } = document
-  .querySelector('.gallery')
+const { height: cardHeight } = document.querySelector('.gallery')
   .firstElementChild.getBoundingClientRect();
-
 window.scrollBy({
   top: cardHeight * 2,
   behavior: 'smooth',
 });
-        if (page >= totalPages) {
-            showLoadMoreBtn();
-            iziToast.info({
-                message: "We're  sorry, but youve reached the end of search results",
-                CaretPosition: 'topRight',
-            });
-        }
-    } catch (error) {
+        } catch (error) {
         iziToast.info({
                 message: "error",
                 CaretPosition: 'topRight',
